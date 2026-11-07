@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JES — Tid, Konstruksjon & Rom</title>
+  <!-- Tailwind CSS for industriell presisjon og responsivitet -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter (Stram grotesk) & Space Mono (Tekniske spesifikasjoner) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            concrete: '#F4F4F2',
+            rawsteel: '#E2E2DF',
+            graphite: '#141413',
+            muted: '#737370',
+            jesblue: '#2B5B84',
+            jesochre: '#6E5034'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Space Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Skreddersydd industriell minimalisme (Wabi-sabi / Japandi) */
+    body {
+      background-color: #F4F4F2;
+      color: #141413;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Subtile 1px stål-linjer for arkitektonisk rutenett */
+    .grid-border-t { border-top: 1px solid #D8D8D4; }
+    .grid-border-b { border-bottom: 1px solid #D8D8D4; }
+    .grid-border-r { border-right: 1px solid #D8D8D4; }
+    .grid-border-l { border-left: 1px solid #D8D8D4; }
+
+    /* Skjul scrollbar men behold funksjonalitet */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #F4F4F2; }
+    ::-webkit-scrollbar-thumb { background: #141413; }
+
+    /* Produktkort hover-effekt */
+    .product-card .img-wrapper img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    }
+    .product-card:hover .img-wrapper img {
+      transform: scale(1.03);
+    }
+
+    /* Flytende sekundærlogo-animasjon */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+    .floating-logo {
+      animation: floatSlow 12s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-graphite selection:text-white">
+
+  <!-- SVG DEFINISJONER FOR JES-LOGOENE (Hovedlogo + Dynamiske varianter) -->
+  <svg class="hidden">
+    <defs>
+      <!-- Hovedlogo: Stram, organisk kalligrafisk "Jes"-silhuett basert på kildemappen -->
+      <g id="jes-logo-path">
+        <path d="M95,22 C75,22 65,45 58,72 C52,95 46,120 35,132 C25,143 12,138 14,124 C16,112 28,105 32,102 C20,104 6,116 6,134 C6,154 24,165 44,158 C64,151 72,125 78,98 C82,82 86,68 92,68 C98,68 96,82 90,94 C83,108 88,122 104,122 C122,122 142,106 146,88 C149,75 138,66 124,68 C108,70 98,86 102,98 C106,108 122,106 135,98 C130,109 116,114 106,112 C96,110 98,96 108,86 C118,76 136,76 134,88 C132,96 116,98 110,92 M78,62 C82,42 92,28 102,30 C110,32 106,50 94,58 C86,63 76,65 52,68 M146,88 C162,84 185,68 202,66 C218,64 226,72 216,82 C204,94 168,96 144,108 C122,119 108,138 114,152 C120,165 145,164 162,146 C152,152 132,154 128,144 C124,134 140,120 166,112 C194,103 232,100 236,80 C239,64 218,54 195,58 C174,62 162,46 182,38 C198,32 214,38 220,44 C218,32 198,24 178,32 C158,40 152,60 168,68" />
+      </g>
+    </defs>
+  </svg>
+
+  <!-- 1. HEADER: Hvit bakgrunn, stram meny, stor tydelig svart hovedlogo i sentrum -->
+  <header class="sticky top-0 z-40 bg-white grid-border-b transition-all duration-200">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8 h-24 sm:h-28 flex items-center justify-between">
+      
+      <!-- Venstre: Primærnavigasjon (Desktop) & Mobilmeny-knapp -->
+      <nav class="flex items-center space-x-6 lg:space-x-8 text-xs tracking-[0.18em] uppercase font-medium">
+        <button onclick="setCategory('ALL')" data-nav="ALL" class="nav-btn text-graphite border-b border-graphite pb-1 transition-colors">Katalog</button>
+        <button onclick="setCategory('JES')" data-nav="JES" class="nav-btn text-muted hover:text-graphite pb-1 transition-colors flex items-center gap-1.5">
+          <span>Jes</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-graphite inline-block"></span>
+        </button>
+        <button onclick="setCategory('KLÆR')" data-nav="KLÆR" class="nav-btn hidden md:inline-block text-muted hover:text-graphite pb-1 transition-colors">Klær</button>
+        <button onclick="setCategory('ACCESSORIES')" data-nav="ACCESSORIES" class="nav-btn hidden lg:inline-block text-muted hover:text-graphite pb-1 transition-colors">Accessories</button>
+        <button onclick="setCategory('GALLERI')" data-nav="GALLERI" class="nav-btn hidden lg:inline-block text-muted hover:text-graphite pb-1 transition-colors">Galleri & Interiør</button>
+      </nav>
+
+      <!-- Sentrum: Stor, tydelig hovedlogo i svart silhuett på hvit bakgrunn -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center bg-white px-4 py-1">
+        <a href="#" onclick="setCategory('ALL'); return false;" aria-label="Jes Hjem" class="block group">
+          <svg viewBox="0 0 250 175" class="h-14 sm:h-16 md:h-20 w-auto fill-none stroke-graphite stroke-[8] stroke-linecap-round stroke-linejoin-round transition-transform duration-300 group-hover:scale-105">
+            <use href="#jes-logo-path" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Høyre: Søk, Filosofi & Handlekurv -->
+      <div class="flex items-center space-x-5 sm:space-x-8 text-xs tracking-[0.15em] uppercase font-medium">
+        <button onclick="toggleSearch()" class="text-graphite hover:text-muted transition-colors flex items-center gap-1.5">
+          <span>Søk</span>
+        </button>
+        <a href="#filosofi" class="hidden sm:inline-block text-muted hover:text-graphite transition-colors">Filosofi</a>
+        <button onclick="toggleCart()" class="text-graphite hover:text-muted transition-colors flex items-center gap-2 font-mono">
+          <span>Kurv</span>
+          <span id="cart-count" class="bg-graphite text-white px-1.5 py-0.5 text-[10px]">0</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Utvidbar Søkelinje -->
+    <div id="search-bar" class="hidden bg-concrete grid-border-t px-4 sm:px-8 py-4">
+      <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+        <input 
+          type="text" 
+          id="search-input" 
+          oninput="handleSearch(this.value)"
+          placeholder="Søk etter konstruksjon, tekstil, snitt eller plagg (f.eks. 'ull', 'jakke', 'CLO 3D')..." 
+          class="w-full bg-transparent text-sm sm:text-base focus:outline-none placeholder:text-muted font-mono"
+        >
+        <button onclick="clearSearch()" class="text-xs uppercase tracking-widest text-muted hover:text-graphite ml-4">Lukk [ESC]</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO / SEKSJONS-BANNER MED FLYTENDE SEKUNDÆRLOGO -->
+  <section id="section-hero" class="relative overflow-hidden grid-border-b bg-concrete transition-colors duration-500">
+    <!-- Dynamisk flytende sekundærlogo i bakgrunnen (endrer stil etter valgt kategori) -->
+    <div id="dynamic-logo-watermark" class="pointer-events-none absolute -right-12 -bottom-16 opacity-[0.07] floating-logo">
+      <svg viewBox="0 0 250 175" class="w-[420px] sm:w-[600px] h-auto fill-none stroke-graphite stroke-[3]">
+        <use href="#jes-logo-path" />
+      </svg>
+    </div>
+
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8 py-12 sm:py-20 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+      <div class="lg:col-span-8">
+        <div class="flex items-center gap-3 mb-4">
+          <span id="hero-tag" class="font-mono text-[11px] uppercase tracking-[0.2em] px-2 py-0.5 bg-rawsteel text-graphite">ARKIV & KONSTRUKSJON</span>
+          <span id="hero-subtag" class="font-mono text-[11px] text-muted">OSLO / BERGEN</span>
+        </div>
+        <h1 id="hero-title" class="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.08] text-graphite max-w-3xl">
+          Tilgjengelig, riktig, tidløs. Stilren streetwear og arkitektonisk ro.
+        </h1>
+      </div>
+      <div class="lg:col-span-4 lg:border-l lg:border-[#D8D8D4] lg:pl-8">
+        <p id="hero-desc" class="text-xs sm:text-sm text-muted leading-relaxed font-normal">
+          Ingen visuell støy. Hvert plagg og objekt er valgt eller konstruert for presis passform, bevegelsesfrihet og varig struktur. De som forstår, forstår.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. INTERAKTIV FILTER- OG KONTROLLBAR -->
+  <section class="sticky top-24 sm:top-28 z-30 bg-concrete/95 backdrop-blur-sm grid-border-b">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 text-xs">
+      
+      <!-- Venstre: Kategorivalg (Hurtigknapper for mobil + Underkategorier) -->
+      <div class="flex items-center flex-wrap gap-2 sm:gap-4">
+        <button onclick="setCategory('ALL')" data-pill="ALL" class="filter-pill px-3 py-1 bg-graphite text-white uppercase tracking-widest text-[11px] transition-all">Alle</button>
+        <button onclick="setCategory('JES')" data-pill="JES" class="filter-pill px-3 py-1 bg-rawsteel text-graphite hover:bg-graphite hover:text-white uppercase tracking-widest text-[11px] transition-all">01. Jes (Egenprodusert)</button>
+        <button onclick="setCategory('KLÆR')" data-pill="KLÆR" class="filter-pill px-3 py-1 bg-rawsteel text-graphite hover:bg-graphite hover:text-white uppercase tracking-widest text-[11px] transition-all">02. Klær</button>
+        <button onclick="setCategory('ACCESSORIES')" data-pill="ACCESSORIES" class="filter-pill px-3 py-1 bg-rawsteel text-graphite hover:bg-graphite hover:text-white uppercase tracking-widest text-[11px] transition-all">03. Accessories</button>
+        <button onclick="setCategory('GALLERI')" data-pill="GALLERI" class="filter-pill px-3 py-1 bg-rawsteel text-graphite hover:bg-graphite hover:text-white uppercase tracking-widest text-[11px] transition-all">04. Galleri & Interiør</button>
+
+        <!-- Kjønn/Passform-filter (vises kun når Klær eller Alle er valgt) -->
+        <div id="subfilter-gender" class="flex items-center border-l border-[#D8D8D4] pl-3 ml-1 space-x-3 text-[11px] font-mono uppercase">
+          <button onclick="setSubCategory('ALL')" data-sub="ALL" class="sub-btn text-graphite underline font-bold">Alle snitt</button>
+          <button onclick="setSubCategory('HERRE')" data-sub="HERRE" class="sub-btn text-muted hover:text-graphite">Herre</button>
+          <button onclick="setSubCategory('DAME')" data-sub="DAME" class="sub-btn text-muted hover:text-graphite">Dame</button>
+        </div>
+      </div>
+
+      <!-- Høyre: Prisfilter, "Unik"-toggle og teller -->
+      <div class="flex items-center flex-wrap gap-4 sm:gap-6 ml-auto font-mono text-[11px]">
+        <!-- Kun én tilgjengelig filter -->
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" id="unique-toggle" onchange="applyFilters()" class="accent-graphite w-3.5 h-3.5">
+          <span class="uppercase tracking-wider">Kun Unike (1/1)</span>
+        </label>
+
+        <!-- Pris-filter (200 - 5000 NOK) -->
+        <div class="flex items-center gap-2">
+          <span class="text-muted uppercase">Pris:</span>
+          <select id="price-filter" onchange="applyFilters()" class="bg-transparent border-b border-graphite pb-0.5 focus:outline-none uppercase cursor-pointer">
+            <option value="ALL">200 – 5000 NOK</option>
+            <option value="UNDER600">Opptil 600 NOK (Kjerne)</option>
+            <option value="600TO1500">600 – 1500 NOK</option>
+            <option value="OVER1500">1500 – 5000 NOK</option>
+          </select>
+        </div>
+
+        <!-- Antall viste objekter -->
+        <div class="text-muted hidden sm:block">
+          Viser <span id="product-count" class="text-graphite font-bold">0</span> objekter
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. PRODUKTKATALOG (RUTENETT MED STÅL-LINJER) -->
+  <main class="flex-grow max-w-[1600px] w-full mx-auto">
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <!-- Produktkort genereres dynamisk via JavaScript -->
+    </div>
+
+    <!-- Tom-tilstand ved søk -->
+    <div id="empty-state" class="hidden py-24 px-4 text-center">
+      <p class="font-mono text-sm uppercase tracking-widest text-muted mb-4">Ingen objekter matcher dine valgte kriterier.</p>
+      <button onclick="resetAllFilters()" class="px-6 py-2.5 bg-graphite text-white text-xs uppercase tracking-widest">Nullstill filtre</button>
+    </div>
+
+    <!-- Katalog-skaleringsindikator (For å håndtere følelsen av 1000-2000 artikler uten å miste estetisk fokus) -->
+    <div class="grid-border-t grid-border-b px-4 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-concrete">
+      <div class="font-mono text-xs text-muted">
+        KATALOG-ARKIV: KURATERT VISNING // <span id="archive-status">AKTIVT UTVALG FRA TOTALT 1 480 OBJEKTER</span>
+      </div>
+      <div class="text-[11px] font-mono text-muted uppercase tracking-wider">
+        * Artikler priset under 200 NOK er ekskludert fra nett og kun tilgjengelig i fysisk butikk.
+      </div>
+    </div>
+  </main>
+
+  <!-- 5. DYNAMISK LOGO-GALLERI & MERKEVAREFILOSOFI ("OM JES") -->
+  <section id="filosofi" class="bg-graphite text-concrete py-20 sm:py-28">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-white/15">
+        <div class="lg:col-span-5 flex flex-col justify-between">
+          <div>
+            <span class="font-mono text-[11px] uppercase tracking-[0.25em] text-muted block mb-4">00 // KJERNEFILOSOFI</span>
+            <h2 class="text-2xl sm:text-4xl font-light tracking-tight leading-snug mb-6">
+              "Den ultimate klesbutikken jeg selv har lett etter, men aldri funnet."
+            </h2>
+          </div>
+          <!-- Sekundærlogo i kunstnerisk fler-linjet utgave (Inspirert av bilde 5, 10, 12 i kildemappen) -->
+          <div class="pt-6">
+            <svg viewBox="0 0 250 175" class="w-48 h-auto fill-none stroke-jesblue stroke-[6] opacity-90">
+              <use href="#jes-logo-path" transform="translate(-4, -3)" class="stroke-white/30 stroke-[3]" />
+              <use href="#jes-logo-path" />
+              <use href="#jes-logo-path" transform="translate(4, 3)" class="stroke-[#D4C391] stroke-[2]" />
+            </svg>
+            <p class="font-mono text-[10px] uppercase tracking-widest text-muted mt-2">Levende identitet — Sekundærlogo #04 (Tekstur/Pastell)</p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-6 text-sm sm:text-base text-concrete/80 font-light leading-relaxed">
+          <p class="text-white font-normal text-base sm:text-lg">
+            Mitt bidrag på min måte: tilgjengelig, riktig, tidløs, stilren streetwear, minimalistisk og med ekspressive visuelle uttrykk. Å velge å gi seg selv muligheten til den fremtiden sånn som den skulle bli.
+          </p>
+          <p>
+            I Jes handler design om fraværet av feil og visuell støy. Enkle snitt og sømmer strategisk plassert på riktige punkter skaper et uttrykk som står av seg selv. For herre betyr det den nøyaktige balansen mellom struktur og bevegelighet – god plass over lårene, riktig fall, og mikroskopiske inntak på punktene som ellers mister fasongen over tid. For dame møtes ren, minimalistisk eleganse og en rå, sportslig track-kontrast.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 font-mono text-xs border-t border-white/15">
+            <div>
+              <span class="text-white block mb-1">KONSTRUKSJON</span>
+              <span class="text-muted">Digital 3D-mønsterkonstruksjon i CLO 3D kombinert med håndplukkede tekstiler.</span>
+            </div>
+            <div>
+              <span class="text-white block mb-1">PRISFILOSOFI</span>
+              <span class="text-muted">200 – 5000 NOK (Hovedvekt ~500 NOK). Quiet luxury holdt bevisst tilgjengelig.</span>
+            </div>
+            <div>
+              <span class="text-white block mb-1">FYSISK & DIGITALT</span>
+              <span class="text-muted">Stål, betong og hvite flater. Hvert unike plagg presenteres uten støy.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visning av de levende logo-versjonene fra kildemappen -->
+      <div class="pt-12">
+        <div class="flex items-center justify-between mb-6">
+          <span class="font-mono text-xs uppercase tracking-widest text-muted">Jes — Levende Logo-arkiv (Brukes på tvers av plagg, vegger og seksjoner)</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <!-- Variant 1: Ren Kontur (Bilde 2/8) -->
+          <div class="border border-white/15 p-6 bg-white/5 flex flex-col justify-between h-40">
+            <svg viewBox="0 0 250 175" class="h-20 w-auto mx-auto fill-none stroke-white stroke-[5]">
+              <use href="#jes-logo-path" />
+            </svg>
+            <span class="font-mono text-[10px] text-muted uppercase">01 // Kontur (Original skisse)</span>
+          </div>
+          <!-- Variant 2: Blå Tekstur/Pastell (Bilde 12/16/28) -->
+          <div class="border border-white/15 p-6 bg-[#1C2833] flex flex-col justify-between h-40">
+            <svg viewBox="0 0 250 175" class="h-20 w-auto mx-auto fill-none stroke-[#5FA8D3] stroke-[9]">
+              <use href="#jes-logo-path" />
+            </svg>
+            <span class="font-mono text-[10px] text-[#5FA8D3] uppercase">02 // Akryl & 3D-Blå (Dame / Track)</span>
+          </div>
+          <!-- Variant 3: Sepia / Jord (Bilde 13) -->
+          <div class="border border-white/15 p-6 bg-[#2C1E14] flex flex-col justify-between h-40">
+            <svg viewBox="0 0 250 175" class="h-20 w-auto mx-auto fill-none stroke-[#C89D7C] stroke-[7]">
+              <use href="#jes-logo-path" />
+            </svg>
+            <span class="font-mono text-[10px] text-[#C89D7C] uppercase">03 // Sepia Skygge (Galleri / Interiør)</span>
+          </div>
+          <!-- Variant 4: Rå Stempel / Konvolutt (Bilde 18/27) -->
+          <div class="border border-white/15 p-6 bg-[#E5E5E0] flex flex-col justify-between h-40">
+            <svg viewBox="0 0 250 175" class="h-20 w-auto mx-auto fill-none stroke-graphite stroke-[12]">
+              <use href="#jes-logo-path" />
+            </svg>
+            <span class="font-mono text-[10px] text-graphite uppercase">04 // Signaturstempel (Jes Egenprodusert)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. FOOTER -->
+  <footer class="bg-concrete grid-border-t py-12 px-4 sm:px-8 text-xs font-mono text-muted">
+    <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div>
+        <span class="text-graphite font-bold">JES KONSEPT & KLESMERKE</span> — OSLO / BERGEN, NORGE
+      </div>
+      <div class="flex flex-wrap gap-6 uppercase">
+        <a href="#filosofi" class="hover:text-graphite">Om Jes</a>
+        <a href="#" onclick="alert('Fysisk butikk: Utvalget under 200 NOK samt 1-av-1 arkivstykker kan oppleves i butikk.'); return false;" class="hover:text-graphite">Fysisk Butikk</a>
+        <a href="mailto:kontakt@jes-atelier.no" class="hover:text-graphite">Kontakt</a>
+        <a href="#" class="hover:text-graphite">Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 7. PRODUKTMODUS / DETALJVISNING (MODAL) -->
+  <div id="product-modal" class="fixed inset-0 z-50 hidden b
